@@ -1,6 +1,9 @@
 from django.db import models
 
+from .managers import SocialPostManager
+
 # Create your models here
+
 
 class SocialPost(models.Model):
     platform = models.CharField(max_length=50)
@@ -11,4 +14,4 @@ class SocialPost(models.Model):
     shares = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    objects = models.Manager()
+    objects = SocialPostManager()

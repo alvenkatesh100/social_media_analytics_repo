@@ -1,6 +1,7 @@
 from django.db import models
 from textblob import TextBlob
 
+
 class SocialPostManager(models.Manager):
 
     def sentiment_analysis(self, post_id):
@@ -19,5 +20,5 @@ class SocialPostManager(models.Manager):
         posts = self.filter(platform=platform)
         if not posts.exists():
             return 0
-        total_engagement = sum([p.likes + p.comments + p.shares for p in posts])
+        total_engagement = sum(p.likes + p.comments + p.shares for p in posts)
         return total_engagement / posts.count()

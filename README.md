@@ -29,32 +29,67 @@ The app extracts post data, runs sentiment analysis, and provides engagement ins
 ```bash
 git clone https://github.com/yourusername/social-media-analytics-dashboard.git
 cd social-media-analytics-dashboard
+```
 
 ### 2️⃣ Create & Activate Virtual Environment
-# Create venv
+```bash
 python -m venv venv
-
-# Activate (Linux/Mac)
 source venv/bin/activate
+```
 
-# Activate (Windows - Command Prompt)
-venv\Scripts\activate
-
-# Activate (Windows - PowerShell)
+On Windows PowerShell:
+```powershell
 venv\Scripts\Activate.ps1
+```
 
 ### 3️⃣ Install Dependencies
+```bash
 pip install -r requirements.txt
+```
 
-### 4️⃣ Run Migrations
-python manage.py makemigrations
+### 4️⃣ Configure Environment
+```bash
+export DJANGO_SECRET_KEY=change-me
+export DJANGO_DEBUG=1
+export DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
+export XQUIK_API_KEY=your_xquik_key
+```
+
+SQLite is the default local database. Set `DB_ENGINE`, `DB_NAME`, `DB_USER`,
+`DB_PASSWORD`, `DB_HOST`, and `DB_PORT` to use another database.
+
+### 5️⃣ Run Migrations
+```bash
+cd social_media_analytics
 python manage.py migrate
+```
 
-### 5️⃣ Create Superuser 
+### 6️⃣ Create Superuser
+```bash
 python manage.py createsuperuser
+```
 
-### 6️⃣ Start the Server
+### 7️⃣ Start the Server
+```bash
 python manage.py runserver
+```
 
+Now open `http://127.0.0.1:8000/api/`.
 
-Now open: 👉 http://127.0.0.1:8000/api/
+## Xquik Import
+
+Authenticated clients can import Xquik search results into the same
+`SocialPost` table used by the analytics API:
+
+```http
+POST /api/posts/xquik/import/
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{"query": "nvidia", "limit": 10}
+```
+
+The endpoint stores imported rows with `platform` set to `xquik`, then returns
+serialized posts with sentiment data.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
